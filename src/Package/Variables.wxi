@@ -1,0 +1,18 @@
+<Include>
+
+  <?define ProductName = "Wix_CA_Test" ?>
+  <?define ProductDisplayName = "Wix Custom Actions Test Setup Package" ?>
+  <?define Manufacturer = "Springcomp" ?>
+
+  <?if $(var.ProductVersion) = "" ?>
+  <?define ProductVersion = "1.0.3.40" ?>
+  <?endif?>
+
+  <?define Win64 = "yes" ?>
+  <?define Architecture = "x64" ?>
+
+  <?define PackageCode = "51ed7fcd-e23f-4a6d-8ea8-b7d760fe3cf5" ?>
+  <?define ProductCode = "64a0e5af-90a3-49e8-bac7-16114606c3a4" ?>
+  <?define ProductUpgradeCode = "95d5efbf-7591-4886-b88c-4f0f79c88b5f" ?>
+
+</Include>
