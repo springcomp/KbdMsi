@@ -4,11 +4,18 @@
   <?include .\Variables.wxi ?>
 
   <!-- Windows Installer package -->
-  <Package Language="1036" Name="$(var.ProductName)" Version="$(var.ProductVersion)" Manufacturer="$(var.Manufacturer)" UpgradeCode="$(var.ProductUpgradeCode)" InstallerVersion="500">
+  <Package Language="1036" Name="$(var.ProductName)" Version="$(var.ProductVersion)" Manufacturer="$(var.Manufacturer)" ProductCode="$(var.ProductCode)" UpgradeCode="$(var.ProductUpgradeCode)" InstallerVersion="500">
 
     <Feature Id="ProductFeature" Title="WiX_CA_Test" Level="1">
       <ComponentGroupRef Id="ProductComponents" />
     </Feature>
+
+    <Binary Id="KbdMsi.CA" SourceFile="$(var.KbdMsi.ProjectDir)bin/$(var.Configuration)/$(var.dotnet)/$(var.KbdMsi.TargetName).CA.dll" />
+    <CustomAction Id="CustomAction" BinaryRef="KbdMsi.CA" Execute="immediate" DllEntry="SampleCA" Impersonate="yes" Return="check" />
+ 
+    <InstallExecuteSequence>
+      <Custom Action="CustomAction" Before="InstallFinalize" Condition="NOT Installed" />
+    </InstallExecuteSequence>
 
   </Package>
 

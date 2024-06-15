@@ -6,11 +6,7 @@
     <ProductVersion>1.0</ProductVersion>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <DefineConstants>Debug</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup>
+  <PropertyGroup >
     <DefineConstants>ProductVersion=$(ProductVersion)</DefineConstants>
   </PropertyGroup>
 
@@ -21,6 +17,10 @@
   
   <ItemGroup>
     <Content Include="Variables.wxi" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../KbdMsi/KbdMsi.csproj" />
   </ItemGroup>
 
 </Project>

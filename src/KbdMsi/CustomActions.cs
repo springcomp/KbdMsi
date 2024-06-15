@@ -5,7 +5,7 @@ namespace KbdMsi
 	public class CustomActions
 	{
 		[CustomAction("SampleCA")]
-		public static ActionResult SampleCustomAction2(Session session)
+		public static ActionResult SampleCustomAction(Session session)
 		{
 			using (Record msgRec = new Record(0))
 			{
@@ -17,7 +17,7 @@ namespace KbdMsi
 			SummaryInfo summInfo = session.Database.SummaryInfo;
 			session.Log("MSI PackageCode = {0}", summInfo.RevisionNumber);
 			session.Log("MSI ModifyDate = {0}", summInfo.LastSaveTime);
-			return ActionResult.UserExit;
+			return ActionResult.Success;
 		}
 	}
 }

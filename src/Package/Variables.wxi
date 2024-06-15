@@ -15,4 +15,6 @@
   <?define ProductCode = "64a0e5af-90a3-49e8-bac7-16114606c3a4" ?>
   <?define ProductUpgradeCode = "95d5efbf-7591-4886-b88c-4f0f79c88b5f" ?>
 
+  <?define dotnet = "net462" ?>
+
 </Include>
