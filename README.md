@@ -11,7 +11,11 @@ The custom actions help design software installation packages (MSI) that can:
 `Kbdmsi.dll` is a drop-in compatible replacement for [the original DLL with the same name](https://github.com/springcomp/optimized-azerty-win) that ships with
 the [Microsoft Keyboard Layout Creator utility (MSKLC)](https://www.microsoft.com/en-us/download/details.aspx?id=102134).
 
-While being compatible with MSKLC is a design goal, it is important to recognize MSKLC limitations and opportunities for improvement.
+While `Kbdmsi.dll` is written in C#, the real WiX toolset custom action DLL is `Kbdmsi.CA.dll`.
+That DLL is a native code, WiX toolset-compatible entry-point. It is a self-extractable archive
+that embeds and delegates its processing to the `Kbdmsi.dll` implementation.
+
+Although being compatible with MSKLC is a design goal, it is important to recognize MSKLC limitations and opportunities for improvement.
 
 ### Support for multi-layout MSI packages
 
