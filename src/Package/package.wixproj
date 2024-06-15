@@ -16,6 +16,7 @@
   </ItemGroup>
   
   <ItemGroup>
+    <Content Include="Properties.wxi" />
     <Content Include="Variables.wxi" />
   </ItemGroup>
 
