@@ -66,6 +66,8 @@ namespace KbdMsi
 
 			// add the keyboard layout details to the registry
 
+			Console.WriteLine($"{klid:x}");
+
 			using var key = OpenRegistry(REG_KBD_ROOT, writeable: true);
 			using var subKey = key.CreateSubKey($"{klid:x8}");
 
@@ -79,6 +81,26 @@ namespace KbdMsi
 			subKey.SetValue("Layout Text", layoutText);
 
 			return $"{klid:x8}";
+		}
+		public static void UnregisterKeyboard(Guid productCode)
+		{
+			var expectedLayoutProductCode = productCode.ToString("B").ToUpperInvariant();
+
+			using var key = OpenRegistry(REG_KBD_ROOT, writeable: true);
+			foreach (var (name, id) in key.EnumKeyboardLayouts())
+			{
+                using var subKey = key.OpenSubKey(name);
+
+				// remove all keyboard layouts with that product code
+				// from the registry
+
+                var keyValue = subKey.GetValue("Layout Product Code");
+                if (keyValue is string actualLayoutProductCode && expectedLayoutProductCode == actualLayoutProductCode)
+                {
+					Console.WriteLine($"{id:x8}");
+					key.DeleteSubKey(name);
+                }
+            }
 		}
 
 		public static string? GetLanguageName(ushort lcid)
@@ -122,25 +144,22 @@ namespace KbdMsi
 			ushort newid = 0x0100;
 
 			using var key = OpenRegistry(REG_KBD_ROOT);
-			foreach (var name in key.GetSubKeyNames())
+			foreach (var (name, id) in key.EnumKeyboardLayouts())
 			{
-				if (uint.TryParse(name, P_HEX, P_LANG, out var id))
+				// record max encountered value for
+				// the registry value named "Layout Id"
+
+				using (var subKey = key.OpenSubKey(name))
 				{
-					// record max encountered value for
-					// the registry value named "Layout Id"
-
-					using (var subKey = key.OpenSubKey(name))
-					{
-						var layoutId = subKey.GetValue("Layout Id");
-						if (layoutId is string _lid && ushort.TryParse(_lid, out var existingid))
-							newid = Math.Max(newid, existingid);
-					}
-
-					// record max encountered value for high-order bits
-
-					if ((ushort)(id & 0x0000FFFF) == lcid)
-						newhi = Math.Max(newhi, (ushort)(id >> 16));
+					var layoutId = subKey.GetValue("Layout Id");
+					if (layoutId is string _lid && ushort.TryParse(_lid, out var existingid))
+						newid = Math.Max(newid, existingid);
 				}
+
+				// record max encountered value for high-order bits
+
+				if ((ushort)(id & 0x0000FFFF) == lcid)
+					newhi = Math.Max(newhi, (ushort)(id >> 16));
 			}
 
 			var klid = (newhi + 1) << 16 | lcid;
