@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <LangVersion>8.0</LangVersion>
+    <nullable>enable</nullable>
     <TargetFramework>net462</TargetFramework>
   </PropertyGroup>
 
@@ -9,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
     <PackageReference Include="WixToolset.Dtf.CustomAction" Version="5.0.0" />
   </ItemGroup>
 

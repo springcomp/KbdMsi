@@ -36,8 +36,8 @@ for (var index = 0; index < args.Length; index++)
 			break;
 	}
 }
-if (productCode != null && operation == null)
-	ArgumentCount("Missing required operation.");
+if (productCode == null)
+	ArgumentCount("Missing required '--product-code' option.");
 if (path != null && lcid == null)
 	ArgumentCount("Argument '--lcid' is required when using '--path' option.");
 if (operation == null)
@@ -53,30 +53,31 @@ string[] operations = [
 if (!operations.Contains(operation!.ToUpperInvariant()))
 	SyntaxError($"Unknown operation '{operation}' specified");
 
-if (path != null && lcid != null)
-	RegisterKeyboard(path!, lcid!);
-if (productCode != null)
-{
-	var code = EnsureProductCode(productCode);
+var code = EnsureProductCode(productCode!);
 
-	switch (operation!.ToUpperInvariant()) {
-		case "ADDKEYBOARDTOLANGBAR":
-			AddKeyboardToLangBar(code);
-			break;
-		case "REMOVEKEYBOARDFROMLANGBAR":
-			RemoveKeyboardFromLangBar(code);
-			break;
-		case "UNREGISTERKEYBOARD":
-			UnregisterKeyboard(code);
-			break;
-	}
+if (path != null && lcid != null)
+	RegisterKeyboard(code, path!, lcid!);
+
+switch (operation!.ToUpperInvariant())
+{
+	case "ADDKEYBOARDTOLANGBAR":
+		AddKeyboardToLangBar(code);
+		break;
+	case "REMOVEKEYBOARDFROMLANGBAR":
+		RemoveKeyboardFromLangBar(code);
+		break;
+	case "UNREGISTERKEYBOARD":
+		UnregisterKeyboard(code);
+		break;
 }
+
+Environment.Exit(0);
 
 void Usage()
 {
 	Console.WriteLine("Usage:");
 	Console.WriteLine("  runner --help");
-	Console.WriteLine("  runner --path <PATH> --lcid <LCID>");
+	Console.WriteLine("  runner [<OPERATION>] --product-code <MSI-PRODUCTCODE> --path <PATH> --lcid <LCID>");
 	Console.WriteLine("  runner <OPERATION> --product-code <MSI-PRODUCTCODE>");
 	Console.WriteLine();
 	Console.WriteLine("Options:");
@@ -92,8 +93,9 @@ void Usage()
 	Console.WriteLine("  UnregisterKeyboard");
 	Console.WriteLine();
 	Console.WriteLine("Examples:");
-	Console.WriteLine(" runner --path C:\\WINDOWS\\System32\\Layout01.dll --lcid 040c");
-	Console.WriteLine(" runner UnregisterKeyboard \"{00000000-0000-0000-0000-000000000000}\"");
+	Console.WriteLine(" runner RegisterKeyboard --product-code \"{55A3FA3E-9897-4E71-91E3-E5BFF615397F}\" --path Layout01.dll --lcid 040c");
+	Console.WriteLine(" runner UnregisterKeyboard --product-code \"{55A3FA3E-9897-4E71-91E3-E5BFF615397F}\"");
+
 	Environment.Exit(1);
 }
 void ArgumentCount(string message)
@@ -151,7 +153,7 @@ Guid EnsureProductCode(string productCode)
 {
 	if (Guid.TryParse(productCode, out var code))
 		return code;
-	
+
 	Console.Error.WriteLine("Invalid product code.");
 	Console.Error.WriteLine($"The value '{productCode}' is not a valid MSI product code.");
 	Environment.Exit(11);
@@ -159,11 +161,11 @@ Guid EnsureProductCode(string productCode)
 	System.Diagnostics.Debug.Assert(false);
 	return Guid.Empty;
 }
-void RegisterKeyboard(string path, string lcid)
+void RegisterKeyboard(Guid code, string path, string lcid)
 {
 	var layoutPath = EnsureKeyboardLayoutFile(path);
-	KeyboardLayoutUtils.RegisterKeyboard(path, lcid);
+	KeyboardLayoutUtils.RegisterKeyboard(code, layoutPath, lcid);
 }
-void AddKeyboardToLangBar(Guid productCode) {}
-void RemoveKeyboardFromLangBar(Guid productCode) {}
-void UnregisterKeyboard(Guid productCode) {}
+void AddKeyboardToLangBar(Guid productCode) { }
+void RemoveKeyboardFromLangBar(Guid productCode) { }
+void UnregisterKeyboard(Guid productCode) { }
