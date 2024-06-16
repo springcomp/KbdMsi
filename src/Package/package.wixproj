@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="../KbdMsi/KbdMsi.csproj" />
+    <ProjectReference Include="../../tests/runner/runner.csproj" />
   </ItemGroup>
 
 </Project>

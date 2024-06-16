@@ -3,7 +3,7 @@
 
   <Property Id="KEYBOARD_ALREADY_PRESENT">
     <DirectorySearch Id="SystemFolder" Path="[SystemFolder]" AssignToProperty="yes">
-      <FileSearch Id="KeyboardFile" Name="KBFRZ71.DLL" />
+      <FileSearch Id="KeyboardFile" Name="LAYOUT01.DLL" />
     </DirectorySearch>
   </Property>
 

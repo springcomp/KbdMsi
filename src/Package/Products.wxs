@@ -6,34 +6,18 @@
   <!-- Windows Installer package -->
   <Package Language="1036" Name="$(var.ProductName)" Version="$(var.ProductVersion)" Manufacturer="$(var.Manufacturer)" ProductCode="$(var.ProductCode)" UpgradeCode="$(var.ProductUpgradeCode)" InstallerVersion="500">
 
-    <Feature Id="ProductFeature" Title="WiX_CA_Test" Level="1">
-      <ComponentGroupRef Id="ProductComponents" />
-    </Feature>
-
-    <Binary Id="KbdMsi.CA" SourceFile="$(var.KbdMsi.ProjectDir)bin/$(var.Configuration)/$(var.dotnet)/$(var.KbdMsi.TargetName).CA.dll" />
-
     <?include Properties.wxi ?>
 
-    <!--
-      sets the value of property "CustomActionData" for the "RegisterKeyboard" deferred custom action
-    -->
-    <CustomAction Id="SetFilePath" Property="RegisterKeyboard" Value="[#File.README.md]|[LCIDValue]" Execute="immediate" />
-    <CustomAction Id="RegisterKeyboard" BinaryRef="KbdMsi.CA" Execute="deferred" DllEntry="CA01" Impersonate="no" Return="check" />
-    <CustomAction Id="UnregisterKeyboard" BinaryRef="KbdMsi.CA" Execute="deferred" DllEntry="CA02" Impersonate="no" Return="check" />
- 
-    <InstallExecuteSequence>
-      <Custom Action="SetFilePath" Sequence="4030" Condition=" 1 = 1 " />
-
-      <Custom Action="UnregisterKeyboard" Sequence="4050" Condition=" Installed " />
-      <Custom Action="RegisterKeyboard" Sequence="4051" Condition=" NOT Installed " />
-    </InstallExecuteSequence>
+    <Feature Id="F_E21451E2_B316_4F0C_9145_654293F9E4BB" Title="WiX_CA_Test" Level="1">
+      <ComponentGroupRef Id="CG_7E7CF1AD_EB9C_4613_8D53_CAEDD61D48AB" />
+    </Feature>
 
   </Package>
 
   <Fragment>
-    <ComponentGroup Id="ProductComponents" Directory="APPLICATIONFOLDER">
-      <Component Id="ProductComponent">
-        <File Id="File.README.md" Source="$(var.ProjectDir)\README.md" />
+    <ComponentGroup Id="CG_7E7CF1AD_EB9C_4613_8D53_CAEDD61D48AB" Directory="APPLICATIONFOLDER">
+      <Component Id="C_E8B42354_2900_404C_B2E2_134BC198C414">
+        <File Id="File.README.md" Source="$(var.ProjectDir)README.md" />
       </Component>
     </ComponentGroup>
   </Fragment>

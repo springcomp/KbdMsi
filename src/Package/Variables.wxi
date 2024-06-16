@@ -11,9 +11,9 @@
   <?define Win64 = "yes" ?>
   <?define Architecture = "x64" ?>
 
-  <?define PackageCode = "51ed7fcd-e23f-4a6d-8ea8-b7d760fe3cf5" ?>
-  <?define ProductCode = "29b580f4-2d92-465a-a00d-9e73164c75b1" ?>
-  <?define ProductUpgradeCode = "95d5efbf-7591-4886-b88c-4f0f79c88b5f" ?>
+  <?define PackageCode = "D8467554-3595-4E3B-A2B2-F1D2F10B4AB0" ?>
+  <?define ProductCode = "D8623EC5-033D-4AF4-8BC0-92C6DC57EE92" ?>
+  <?define ProductUpgradeCode = "D2071B82-CACA-4DB2-B1BB-2DAF567F54F3" ?>
 
   <?define dotnet = "net462" ?>
 
