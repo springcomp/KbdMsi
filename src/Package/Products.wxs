@@ -22,7 +22,7 @@
   <Fragment>
     <ComponentGroup Id="CG_BFE2B991_F8BA_45A3_BA23_796F88F14E55" Directory="System6432Folder">
       <Component Id="C_E88F3B67_ECC3_4FF8_A51B_D312597479EA">
-        <File Id="File.LAYOUT01.DLL" Source="$(var.runner.ProjectDir)/Resources/x64/Layout01.dll" />
+        <File Id="File.LAYOUT01.DLL" Source="$(var.runner.ProjectDir)/Resources/wow64/Layout01.dll" />
       </Component>
     </ComponentGroup>
   </Fragment>
