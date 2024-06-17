@@ -1,23 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <?include Variables.wxi?>
 
-  <?include Variables.wxi ?>
-
-  <!-- Windows Installer package -->
-  <Package Language="1036" Name="$(var.ProductName)" Version="$(var.ProductVersion)" Manufacturer="$(var.Manufacturer)" ProductCode="$(var.ProductCode)" UpgradeCode="$(var.ProductUpgradeCode)" InstallerVersion="500">
-
-    <?include Properties.wxi ?>
+  <Package
+    Language="1036"
+    Name="$(var.ProductName)"
+    Version="$(var.ProductVersion)"
+    Manufacturer="$(var.Manufacturer)"
+    ProductCode="$(var.ProductCode)"
+    UpgradeCode="$(var.ProductUpgradeCode)"
+    InstallerVersion="500"
+  >
+    <?include Properties.wxi?>
 
     <Feature Id="F_E21451E2_B316_4F0C_9145_654293F9E4BB" Title="WiX_CA_Test" Level="1">
-      <ComponentGroupRef Id="CG_7E7CF1AD_EB9C_4613_8D53_CAEDD61D48AB" />
+      <ComponentGroupRef Id="CG_BFE2B991_F8BA_45A3_BA23_796F88F14E55" />
     </Feature>
 
   </Package>
 
   <Fragment>
-    <ComponentGroup Id="CG_7E7CF1AD_EB9C_4613_8D53_CAEDD61D48AB" Directory="APPLICATIONFOLDER">
-      <Component Id="C_E8B42354_2900_404C_B2E2_134BC198C414">
-        <File Id="File.README.md" Source="$(var.ProjectDir)README.md" />
+    <ComponentGroup Id="CG_BFE2B991_F8BA_45A3_BA23_796F88F14E55" Directory="System6432Folder">
+      <Component Id="C_E88F3B67_ECC3_4FF8_A51B_D312597479EA">
+        <File Id="File.LAYOUT01.DLL" Source="$(var.runner.ProjectDir)/Resources/x64/Layout01.dll" />
       </Component>
     </ComponentGroup>
   </Fragment>

@@ -3,11 +3,11 @@
   <PropertyGroup>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems> 
     <OutputType>Package</OutputType> 
-    <ProductVersion>1.0</ProductVersion>
+    <InstallerPlatform>x64</InstallerPlatform>
   </PropertyGroup>
 
-  <PropertyGroup >
-    <DefineConstants>ProductVersion=$(ProductVersion)</DefineConstants>
+  <PropertyGroup Condition=" '$(ProductVersion)' != '' ">
+    <DefineConstants>$(DefineConstants);ProductVersion=$(ProductVersion)</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>

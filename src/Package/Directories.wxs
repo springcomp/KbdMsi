@@ -1,18 +1,20 @@
-<?include .\Variables.wxi ?>
+<?include .\Variables.wxi?>
 
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
-	<Fragment Id="FragDirectories">
-      
-      <!-- WIX TOOLSET FOLDERS: https://docs.microsoft.com/en-us/windows/win32/msi/property-reference?redirectedfrom=MSDN#system-folder-properties -->
+  <Fragment Id="FragDirectories">
 
-      <!-- C:\Program Files (x86)\MANUFACTURER\PRODUCT -->
-      <StandardDirectory Id="ProgramFiles6432Folder">
-        <Directory Id="ManufacturerFolder" Name="$(var.Manufacturer)">
-          <Directory Id="APPLICATIONFOLDER" Name="$(var.ProductName)">
-          </Directory>
+    <!-- WIX TOOLSET FOLDERS:
+    https://docs.microsoft.com/en-us/windows/win32/msi/property-reference?redirectedfrom=MSDN#system-folder-properties -->
+
+    <!-- x86: C:\Program Files (x86)\MANUFACTURER\PRODUCT -->
+    <!-- x64: C:\Program Files\MANUFACTURER\PRODUCT -->
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="ManufacturerFolder" Name="$(var.Manufacturer)">
+        <Directory Id="APPLICATIONFOLDER" Name="$(var.ProductName)">
         </Directory>
-      </StandardDirectory>
+      </Directory>
+    </StandardDirectory>
 
-    </Fragment>
+  </Fragment>
 
 </Wix>

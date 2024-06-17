@@ -2,7 +2,7 @@
 <Include xmlns="http://wixtoolset.org/schemas/v4/wxs">
 
   <Property Id="KEYBOARD_ALREADY_PRESENT">
-    <DirectorySearch Id="SystemFolder" Path="[SystemFolder]" AssignToProperty="yes">
+    <DirectorySearch Id="SystemFolder" Path="[System6432Folder]" AssignToProperty="yes">
       <FileSearch Id="KeyboardFile" Name="LAYOUT01.DLL" />
     </DirectorySearch>
   </Property>
