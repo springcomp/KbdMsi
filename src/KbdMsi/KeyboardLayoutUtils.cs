@@ -103,8 +103,6 @@ namespace KbdMsi
 
 		public static void AddKeyboardToLangBar(Guid productCode)
 		{
-			Console.WriteLine("AddKeyboardToLangBar");
-
 			// Find KLIDs from productCode
 
 			foreach (var klid in FindKeyboardLayouts(productCode))
@@ -134,6 +132,127 @@ namespace KbdMsi
 
 		public static void RemoveKeyboardFromLangBar(Guid productCode)
 		{
+			static List<uint> GetSubstitutesToRemove(uint klid)
+			{
+				List<uint> substitutesToRemove = [];
+
+				using var substKey = OpenRegistry(HKCU_KEYBOARD_LAYOUT_SUBSTITUTES);
+				foreach (var valueName in substKey.GetValueNames())
+				{
+					if (uint.TryParse(valueName, P_HEX, P_LANG, out var substitute))
+					{
+						var valueValue = substKey.GetValue(valueName) as string;
+						if (uint.TryParse(valueValue ?? "", P_HEX, P_LANG, out var existingklid))
+						{
+							if (existingklid == klid)
+								substitutesToRemove.Add(substitute);
+						}
+					}
+				}
+
+				return substitutesToRemove;
+			}
+
+			static (int[] OrdersToRemove, (int Order, uint NewSubstitute)[]) GetNewSubstitutes(IList<uint> substitutesToRemove)
+			{
+				List<(int, uint)> preLoad = [];
+
+				using var preloadKey = OpenRegistry(HKCU_KEYBOARD_LAYOUT_PRELOAD);
+				foreach (var valueName in preloadKey.GetValueNames())
+				{
+					if (int.TryParse(valueName, out int order))
+					{
+						var valueValue = preloadKey.GetValue(valueName);
+						if (uint.TryParse((valueValue as string) ?? "", P_HEX, P_LANG, out var substitute))
+							preLoad.Add((order, substitute));
+					}
+				}
+				var (toRemove, toUpdate) = ReOrder(
+					preLoad.ToArray(),
+					[.. substitutesToRemove]
+				);
+
+				return (toRemove, toUpdate);
+			}
+
+			// remove all keyboard layouts from the language bar
+
+			foreach (var klid in FindKeyboardLayouts(productCode))
+			{
+				List<uint> substitutesToRemove = GetSubstitutesToRemove(klid);
+				var (toRemove, toUpdate) = GetNewSubstitutes(substitutesToRemove);
+
+				using (var key = OpenRegistry(HKCU_KEYBOARD_LAYOUT_SUBSTITUTES, writeable: true))
+				{
+					foreach (var substitute in substitutesToRemove)
+					{
+						Console.WriteLine($"Substitute: {substitute:x8}");
+						key.DeleteValue($"{substitute:x8}");
+					}
+				}
+
+				using (var key = OpenRegistry(HKCU_KEYBOARD_LAYOUT_PRELOAD, writeable: true))
+				{
+					foreach (var item in toRemove)
+					{
+						Console.WriteLine($"Removing order: {item}");
+						key.DeleteValue($"{item}");
+					}
+					foreach (var (Order, NewSubstitute) in toUpdate)
+					{
+						Console.WriteLine($"set {Order} to {NewSubstitute:x8}");
+						key.SetValue($"{Order}", $"{NewSubstitute:x8}");
+					}
+				}
+			}
+		}
+
+		private static (int[] ToRemove, (int Order, uint NewSubstitute)[]) ReOrder((int Order, uint Substitute)[] entries, uint[] substitutesToRemove)
+		{
+			// TODO: prerequisite: Order is sorted
+
+			List<(int Order, uint Substitute)> collection = new(entries);
+			List<int> toRemove = [];
+
+			foreach (var substitute in substitutesToRemove)
+			{
+				// find index of entry to remove
+				// from the collection
+
+				var index = 0;
+				for (; index < collection.Count; index++)
+					if (collection[index].Substitute == substitute)
+					{
+						Console.WriteLine($"Found index: {index} to remove");
+						break;
+					}
+
+				if (index < collection.Count)
+				{
+					// shift all values down one level
+
+					for (; index < collection.Count; index++)
+					{
+						if (index + 1 < collection.Count)
+						{
+							collection[index] =
+								(collection[index].Order, collection[index + 1].Substitute);
+						}
+					}
+					// remove last value
+
+					toRemove.Add(collection[collection.Count - 1].Order);
+					collection.RemoveAt(collection.Count - 1);
+				}
+			}
+
+			if (toRemove.Count == 0)
+				collection.Clear();
+
+			return (
+				toRemove.ToArray(),
+				collection.ToArray()
+				);
 		}
 
 		public static uint AssignNewKeyboardLayoutSubstitute(ushort lcid)

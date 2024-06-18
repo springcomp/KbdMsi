@@ -169,7 +169,8 @@ void RegisterKeyboard(Guid code, string path, string lcid)
 void AddKeyboardToLangBar(Guid productCode)
 	=> KeyboardLayoutUtils.AddKeyboardToLangBar(productCode);
 
-void RemoveKeyboardFromLangBar(Guid productCode) { }
+void RemoveKeyboardFromLangBar(Guid productCode)
+	=> KeyboardLayoutUtils.RemoveKeyboardFromLangBar(productCode);
 
 void UnregisterKeyboard(Guid productCode)
 	=> KeyboardLayoutUtils.UnregisterKeyboard(productCode);

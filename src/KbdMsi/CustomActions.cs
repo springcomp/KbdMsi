@@ -48,6 +48,15 @@ namespace KbdMsi
 					return ActionResult.Success;
 				});
 
+		[CustomAction("CA04")]
+		public static ActionResult RemoveKeyboardToLangBar(Session session)
+			=> TryCatchProcessProductCode(
+				session, (_, productCode) =>
+				{
+					KeyboardLayoutUtils.RemoveKeyboardFromLangBar(productCode);
+					return ActionResult.Success;
+				});
+
 		private static ActionResult TryCatchProcessProductCode(Session session, Func<Session, Guid, ActionResult> processor)
 		{
 			try
