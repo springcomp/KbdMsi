@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -9,7 +11,10 @@ namespace KbdMsi
 {
 	public static class KeyboardLayoutUtils
 	{
-		const string REG_KBD_ROOT = "HKLM://SYSTEM/ControlSet001/Control/Keyboard Layouts";
+		const string HKLM_KEYBOARD_LAYOUTS = "HKLM://SYSTEM/ControlSet001/Control/Keyboard Layouts";
+		const string HKCU_KEYBOARD_LAYOUT_PRELOAD = "HKCU://Keyboard Layout/Preload";
+		const string HKCU_KEYBOARD_LAYOUT_SUBSTITUTES = "HKCU://Keyboard Layout/Substitutes";
+
 
 		const NumberStyles P_HEX = NumberStyles.HexNumber;
 		static readonly IFormatProvider P_LANG = CultureInfo.InvariantCulture;
@@ -68,7 +73,7 @@ namespace KbdMsi
 
 			Console.WriteLine($"{klid:x}");
 
-			using var key = OpenRegistry(REG_KBD_ROOT, writeable: true);
+			using var key = OpenRegistry(HKLM_KEYBOARD_LAYOUTS, writeable: true);
 			using var subKey = key.CreateSubKey($"{klid:x8}");
 
 			subKey.SetValue("Custom Language Display Name", languageDisplayName);
@@ -84,23 +89,82 @@ namespace KbdMsi
 		}
 		public static void UnregisterKeyboard(Guid productCode)
 		{
-			var expectedLayoutProductCode = productCode.ToString("B").ToUpperInvariant();
-
-			using var key = OpenRegistry(REG_KBD_ROOT, writeable: true);
-			foreach (var (name, id) in key.EnumKeyboardLayouts())
+			using var key = OpenRegistry(HKLM_KEYBOARD_LAYOUTS, writeable: true);
+			foreach (var klid in FindKeyboardLayouts(productCode))
 			{
-                using var subKey = key.OpenSubKey(name);
-
 				// remove all keyboard layouts with that product code
 				// from the registry
 
-                var keyValue = subKey.GetValue("Layout Product Code");
-                if (keyValue is string actualLayoutProductCode && expectedLayoutProductCode == actualLayoutProductCode)
-                {
-					Console.WriteLine($"{id:x8}");
-					key.DeleteSubKey(name);
-                }
-            }
+				var name = $"{klid:x8}";
+				Console.WriteLine(name);
+				key.DeleteSubKey(name);
+			}
+		}
+
+		public static void AddKeyboardToLangBar(Guid productCode)
+		{
+			Console.WriteLine("AddKeyboardToLangBar");
+
+			// Find KLIDs from productCode
+
+			foreach (var klid in FindKeyboardLayouts(productCode))
+			{
+				ushort lcid = (ushort)(klid & 0x0000FFFF);
+				uint substitute = AssignNewKeyboardLayoutSubstitute(lcid);
+
+				int nextorder = 1;
+
+				using var key = OpenRegistry(HKCU_KEYBOARD_LAYOUT_PRELOAD, writeable: true);
+				foreach (var name in key.GetValueNames())
+				{
+					if (int.TryParse(name, out int order))
+						nextorder = Math.Max(nextorder, order);
+				}
+
+				nextorder += 1;
+
+				Console.WriteLine($"Substitute: {substitute:x8} -> {klid:x8}");
+				Console.WriteLine($"Preload: {nextorder} -> {substitute:x8}");
+
+				using var substKey = OpenRegistry(HKCU_KEYBOARD_LAYOUT_SUBSTITUTES, writeable: true);
+				substKey.SetValue($"{substitute:x8}", $"{klid:x8}");
+				key.SetValue($"{nextorder}", $"{substitute:x8}");
+			}
+		}
+
+		public static void RemoveKeyboardFromLangBar(Guid productCode)
+		{
+		}
+
+		public static uint AssignNewKeyboardLayoutSubstitute(ushort lcid)
+		{
+			ushort newhi = 0xd000;
+
+			using var key = OpenRegistry(HKCU_KEYBOARD_LAYOUT_SUBSTITUTES);
+			foreach (var valueName in key.GetValueNames())
+			{
+				if (uint.TryParse(valueName, P_HEX, P_LANG, out var existingid))
+				{
+					ushort existinghi = (ushort)((existingid & 0xFFFF0000) >> 16);
+					newhi = Math.Max(newhi, existinghi);
+				}
+			}
+
+			return (uint)(newhi + 1) << 16 | lcid;
+		}
+		public static IEnumerable<uint> FindKeyboardLayouts(Guid productCode)
+		{
+			var expectedLayoutProductCode = productCode.ToString("B").ToUpperInvariant();
+
+			using var key = OpenRegistry(HKLM_KEYBOARD_LAYOUTS, writeable: true);
+			foreach (var (name, id) in key.EnumKeyboardLayouts())
+			{
+				using var subKey = key.OpenSubKey(name);
+
+				var keyValue = subKey.GetValue("Layout Product Code");
+				if (keyValue is string actualLayoutProductCode && expectedLayoutProductCode == actualLayoutProductCode)
+					yield return id;
+			}
 		}
 
 		public static string? GetLanguageName(ushort lcid)
@@ -131,7 +195,7 @@ namespace KbdMsi
 		/// </summary>
 		/// <param name="lcid">locale code identifier</param>
 		/// <returns>new keyboard layout identifier</returns>
-		public static (int KeyboardLayoutIdentifier, ushort LayoutId) AssignKLID(ushort lcid)
+		public static (uint KeyboardLayoutIdentifier, ushort LayoutId) AssignKLID(ushort lcid)
 		{
 			// MSKLC assigns new KLIDs starting from this number
 
@@ -143,7 +207,7 @@ namespace KbdMsi
 
 			ushort newid = 0x0100;
 
-			using var key = OpenRegistry(REG_KBD_ROOT);
+			using var key = OpenRegistry(HKLM_KEYBOARD_LAYOUTS);
 			foreach (var (name, id) in key.EnumKeyboardLayouts())
 			{
 				// record max encountered value for
@@ -162,7 +226,7 @@ namespace KbdMsi
 					newhi = Math.Max(newhi, (ushort)(id >> 16));
 			}
 
-			var klid = (newhi + 1) << 16 | lcid;
+			var klid = (uint)(newhi + 1) << 16 | lcid;
 			var lid = (ushort)(newid + 1);
 
 			return (klid, lid);
@@ -176,6 +240,7 @@ namespace KbdMsi
 			var key = root switch
 			{
 				"HKLM" => Registry.LocalMachine,
+				"HKCU" => Registry.CurrentUser,
 				_ => throw new NotSupportedException(),
 			};
 			foreach (var subkey in relative.Split('/'))

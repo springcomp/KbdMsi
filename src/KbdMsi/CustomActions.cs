@@ -39,6 +39,15 @@ namespace KbdMsi
 					return ActionResult.Success;
 				});
 
+		[CustomAction("CA03")]
+		public static ActionResult AddKeyboardToLangBar(Session session)
+			=> TryCatchProcessProductCode(
+				session, (_, productCode) =>
+				{
+					KeyboardLayoutUtils.AddKeyboardToLangBar(productCode);
+					return ActionResult.Success;
+				});
+
 		private static ActionResult TryCatchProcessProductCode(Session session, Func<Session, Guid, ActionResult> processor)
 		{
 			try

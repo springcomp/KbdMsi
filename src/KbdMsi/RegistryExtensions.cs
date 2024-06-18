@@ -10,8 +10,6 @@ namespace KbdMsi
 {
 	public static class RegistryExtensions
 	{
-		const string REG_KBD_ROOT = "HKLM://SYSTEM/ControlSet001/Control/Keyboard Layouts";
-
 		const NumberStyles P_HEX = NumberStyles.HexNumber;
 		static readonly IFormatProvider P_LANG = CultureInfo.InvariantCulture;
 
@@ -24,7 +22,6 @@ namespace KbdMsi
 					;
 
 			return key.EnumSubkeyNames(IsKeyboardLayout);
-
 		}
 		public static IEnumerable<(string SukeyName, T Selected)> EnumSubkeyNames<T>(this RegistryKey key, Func<string, T?>? selector = null) where T : struct
 		{

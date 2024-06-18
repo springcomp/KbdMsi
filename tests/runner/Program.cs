@@ -93,8 +93,8 @@ void Usage()
 	Console.WriteLine("  UnregisterKeyboard");
 	Console.WriteLine();
 	Console.WriteLine("Examples:");
-	Console.WriteLine(" runner RegisterKeyboard --product-code \"{55A3FA3E-9897-4E71-91E3-E5BFF615397F}\" --path Layout01.dll --lcid 040c");
-	Console.WriteLine(" runner UnregisterKeyboard --product-code \"{55A3FA3E-9897-4E71-91E3-E5BFF615397F}\"");
+	Console.WriteLine(" runner RegisterKeyboard --product-code \"{D8623EC5-033D-4AF4-8BC0-92C6DC57EE92}\" --path Layout01.dll --lcid 040c");
+	Console.WriteLine(" runner UnregisterKeyboard --product-code \"{D8623EC5-033D-4AF4-8BC0-92C6DC57EE92}\"");
 
 	Environment.Exit(1);
 }
@@ -166,7 +166,8 @@ void RegisterKeyboard(Guid code, string path, string lcid)
 	var layoutPath = EnsureKeyboardLayoutFile(path);
 	KeyboardLayoutUtils.RegisterKeyboard(code, layoutPath, lcid);
 }
-void AddKeyboardToLangBar(Guid productCode) { }
+void AddKeyboardToLangBar(Guid productCode)
+	=> KeyboardLayoutUtils.AddKeyboardToLangBar(productCode);
 
 void RemoveKeyboardFromLangBar(Guid productCode) { }
 
