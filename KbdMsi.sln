@@ -7,7 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{268A330C-178
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KbdMsi", "src\KbdMsi\KbdMsi.csproj", "{AB2C03CD-8308-47A6-9067-4D71E69225EE}"
 EndProject
-Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "package", "src\Package\package.wixproj", "{C250E724-CFEC-4A76-8823-346F068DB318}"
+Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "package_x64", "src\Package\package_x64.wixproj", "{C250E724-CFEC-4A76-8823-346F068DB318}"
+EndProject
+Project("{B7DD6F7E-DEF8-4E67-B5B7-07EF123DB6F0}") = "package_x86", "src\Package\package_x86.wixproj", "{BDDEF760-D301-46DD-A51F-B0A6D814D16D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,10 @@ Global
 		{C250E724-CFEC-4A76-8823-346F068DB318}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C250E724-CFEC-4A76-8823-346F068DB318}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C250E724-CFEC-4A76-8823-346F068DB318}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDDEF760-D301-46DD-A51F-B0A6D814D16D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDDEF760-D301-46DD-A51F-B0A6D814D16D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDDEF760-D301-46DD-A51F-B0A6D814D16D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDDEF760-D301-46DD-A51F-B0A6D814D16D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,6 +36,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{AB2C03CD-8308-47A6-9067-4D71E69225EE} = {268A330C-178C-4E23-96F4-066519E3B4DF}
 		{C250E724-CFEC-4A76-8823-346F068DB318} = {268A330C-178C-4E23-96F4-066519E3B4DF}
+		{BDDEF760-D301-46DD-A51F-B0A6D814D16D} = {268A330C-178C-4E23-96F4-066519E3B4DF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {35394FB8-D4E8-4BF5-9CD3-9E8F3C303C0B}

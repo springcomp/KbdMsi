@@ -5,7 +5,9 @@
   <?ifndef ProductVersion?>
   <?define ProductVersion = "1.0.3.40"?>
   <?endif?>
-  <?define Win64 = "yes"?>
+  <?ifndef Win64?>
+  <?define Win64 = "no"?>
+  <?endif?>
   <?define Architecture = "x64"?>
   <?define PackageCode = "D8467554-3595-4E3B-A2B2-F1D2F10B4AB0"?>
   <?define ProductCode = "D8623EC5-033D-4AF4-8BC0-92C6DC57EE92"?>

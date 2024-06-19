@@ -49,7 +49,7 @@ namespace KbdMsi
 			// the string table resource and specified explicitly in the registry.
 			// For now, use Windows’ native language name for the LCID if string is not found.
 
-			var languageDisplayName = $"@%SystemRoot%\\system32\\${layoutFile},-1100";
+			var languageDisplayName = $"@%SystemRoot%\\system32\\{layoutFile},-1100";
 			var languageName = Win32.NativeMethods.ExtractStringFromDLL(path, 1100);
 			if (languageName == "")
 				languageName = GetLanguageName(lcid);
@@ -66,7 +66,7 @@ namespace KbdMsi
 			// the layout text property does not. So we need to extract the
 			// resource ourselves here
 
-			var layoutDisplayName = $"@%SystemRoot%\\system32\\${layoutFile},-1000";
+			var layoutDisplayName = $"@%SystemRoot%\\system32\\{layoutFile},-1000";
 			var layoutText = Win32.NativeMethods.ExtractStringFromDLL(path, 1000);
 			if (layoutText == "")
 				layoutText = $"{layoutFile} keyboard layout";
@@ -305,7 +305,7 @@ namespace KbdMsi
 				: ""
 				;
 
-			return $"{firstLetter}{remainder}";
+			return $"NOT FROM RC: {firstLetter}{remainder}";
 		}
 
 		/// <summary>

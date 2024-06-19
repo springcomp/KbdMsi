@@ -6,7 +6,7 @@ namespace Win32
 {
 	public static class NativeMethods
 	{
-		[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Ansi)]
+		[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
 		private static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPStr)] string lpFileName);
 
 		[DllImport("user32.dll", CharSet = CharSet.Auto)]

@@ -35,6 +35,7 @@ namespace KbdMsi
 			=> TryCatchProcessProductCode(
 				session, (_, productCode) =>
 				{
+					session.Log("Unregistering keyboard layout(s).");
 					KeyboardLayoutUtils.UnregisterKeyboard(productCode);
 					return ActionResult.Success;
 				});
@@ -44,6 +45,7 @@ namespace KbdMsi
 			=> TryCatchProcessProductCode(
 				session, (_, productCode) =>
 				{
+					session.Log("Adding keyboard layout(s) to the language bar.");
 					KeyboardLayoutUtils.AddKeyboardToLangBar(productCode);
 					return ActionResult.Success;
 				});
@@ -53,6 +55,7 @@ namespace KbdMsi
 			=> TryCatchProcessProductCode(
 				session, (_, productCode) =>
 				{
+					session.Log("Removing keyboard layout(s) from the language bar.");
 					KeyboardLayoutUtils.RemoveKeyboardFromLangBar(productCode);
 					return ActionResult.Success;
 				});
