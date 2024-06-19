@@ -68,6 +68,8 @@ namespace KbdMsi
 
 			var layoutDisplayName = $"@%SystemRoot%\\system32\\${layoutFile},-1000";
 			var layoutText = Win32.NativeMethods.ExtractStringFromDLL(path, 1000);
+			if (layoutText == "")
+				layoutText = $"{layoutFile} keyboard layout";
 
 			// add the keyboard layout details to the registry
 
