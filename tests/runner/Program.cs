@@ -122,7 +122,11 @@ string EnsureKeyboardLayoutFile(string path)
 	if (!fileName.EndsWith(".dll"))
 		fileName = Path.ChangeExtension(fileName, ".dll");
 
-	var sysFolder = Environment.SystemDirectory;
+	var sysFolder = Win32.NativeMethods.Is64BitProcess
+		? Environment.GetFolderPath(Environment.SpecialFolder.System)
+		: Environment.GetFolderPath(Environment.SpecialFolder.SystemX86);
+		;
+
 	var expectedPath = Path.Combine(sysFolder, fileName);
 
 	var actualFolder = Path.GetDirectoryName(path);
