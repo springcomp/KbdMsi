@@ -1,14 +1,17 @@
 <Include>
+
+  <?if $(var.Arch) == "x64"?>
+  <?include Variables_x64.wxi?>
+  <?else?>
+  <?include Variables_x86.wxi?>
+  <?endif?>
+
   <?define ProductName = "Wix_CA_Test"?>
   <?define ProductDisplayName = "Wix Custom Actions Test Setup Package"?>
   <?define Manufacturer = "Springcomp"?>
   <?ifndef ProductVersion?>
   <?define ProductVersion = "1.0.3.40"?>
   <?endif?>
-  <?ifndef Win64?>
-  <?define Win64 = "no"?>
-  <?endif?>
-  <?define Architecture = "x64"?>
   <?define PackageCode = "D8467554-3595-4E3B-A2B2-F1D2F10B4AB0"?>
   <?define ProductCode = "D8623EC5-033D-4AF4-8BC0-92C6DC57EE92"?>
   <?define ProductUpgradeCode = "D2071B82-CACA-4DB2-B1BB-2DAF567F54F3"?>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  
   <?include Variables.wxi?>
 
   <Package
@@ -79,10 +80,10 @@
   <Fragment>
     <ComponentGroup Id="CG_BFE2B991_F8BA_45A3_BA23_796F88F14E55" Directory="System6432Folder">
       <Component Id="C_E88F3B67_ECC3_4FF8_A51B_D312597479EA">
-        <?if Win64 == "yes"?>
-        <File Id="File.LAYOUT01.DLL" Source="$(var.runner.ProjectDir)/Resources/amd64/Layout01.dll" />
+        <?if $(var.Win64) == "yes"?>
+        <File Id="File.LAYOUT01.DLL" Source="$(var.ProjectDir)../../tests/runner/Resources/amd64/Layout01.dll" />
         <?else?>
-        <File Id="File.LAYOUT01.DLL" Source="$(var.runner.ProjectDir)/Resources/i386/Layout01.dll" />
+        <File Id="File.LAYOUT01.DLL" Source="$(var.ProjectDir)../../tests/runner/Resources/i386/Layout01.dll" />
         <?endif?>
       </Component>
     </ComponentGroup>

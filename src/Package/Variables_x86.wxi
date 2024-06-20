@@ -1,0 +1,3 @@
+<Include>
+  <?define Win64 = "no"?>
+</Include>

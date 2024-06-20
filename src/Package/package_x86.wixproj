@@ -6,16 +6,8 @@
     <InstallerPlatform>x86</InstallerPlatform>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(ProductVersion)' != '' ">
-    <DefineConstants>$(DefineConstants);ProductVersion=$(ProductVersion)</DefineConstants>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(InstallerPlatform)' != 'x64' ">
-    <DefineConstants>$(DefineConstants);Win64=no</DefineConstants>
-  </PropertyGroup>
-  
-  <PropertyGroup Condition=" '$(InstallerPlatform)' == 'x64' ">
-    <DefineConstants>$(DefineConstants);Win64=yes</DefineConstants>
+  <PropertyGroup>
+    <DefineConstants>Arch=$(InstallerPlatform)</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,7 +22,6 @@
 
   <ItemGroup>
     <ProjectReference Include="../KbdMsi/KbdMsi.csproj" />
-    <ProjectReference Include="../../tests/runner/runner.csproj" />
   </ItemGroup>
 
 </Project>
